@@ -40,7 +40,7 @@ namespace selyan
         std::strcpy(m_c_str, other.m_c_str);
     }
 
-    String::String(String &&other)
+    String::String(String &&other) noexcept
     {
         m_stringLength = other.m_stringLength;
         m_bufferSize = other.m_bufferSize;
@@ -56,7 +56,7 @@ namespace selyan
         delete[] m_c_str;
     }
 
-    void String::operator=(const char *c_string)
+    String& String::operator=(const char *c_string)
     {
         if (c_string == nullptr)
         {
@@ -73,18 +73,27 @@ namespace selyan
 
             std::strcpy(m_c_str, c_string);
         }
+
+        return *this;
     }
 
-    void String::operator=(const String &other)
+    String& String::operator=(const String &other)
     {
+        if(&other == this)
+            return *this;
+
         m_stringLength = other.m_stringLength;
         m_bufferSize = other.m_bufferSize;
+
+        delete[] m_c_str;
         m_c_str = new char[m_bufferSize];
 
         std::strcpy(m_c_str, other.m_c_str);
+
+        return *this;
     }
 
-    void String::operator=(String &&other)
+    String& String::operator=(String &&other) noexcept
     {
         m_stringLength = other.m_stringLength;
         m_bufferSize = other.m_bufferSize;
@@ -93,6 +102,8 @@ namespace selyan
         other.m_stringLength = 0;
         other.m_bufferSize = 0;
         other.m_c_str = nullptr;
+
+        return *this;
     }
 
     char &String::operator[](size_t index)

@@ -13,7 +13,7 @@ namespace selyan
 
         String(const String& other);
 
-        String(String&& other);
+        String(String&& other) noexcept;
 
         ~String();
 
@@ -32,19 +32,17 @@ namespace selyan
             return m_c_str;
         }
 
-        void operator=(const char* c_string);
+        String& operator=(const char* c_string);
 
-        void operator=(const String& other);
+        String& operator=(const String& other);
 
-        void operator=(String&& other);
+        String& operator=(String&& other) noexcept;
 
         char& operator[](size_t index);
 
         char operator[](size_t index) const;
 
         String& operator+=(const String& other);
-
-        const String& operator+=(const String& other) const;
 
     private:
         size_t m_bufferSize;
