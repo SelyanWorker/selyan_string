@@ -1,17 +1,13 @@
 #pragma once
 
 #include <cstring>
-#include <iterator>
+#include <algorithm>
+#include <cctype>
 
 namespace selyan
 {
-
     class String
     {
-    public:
-        using char_type = char;
-        using iterator_type = std::iterator<std::random_access_iterator_tag, char_type>;
-
     public:
         String(const char* c_string = nullptr);
 
@@ -21,6 +17,27 @@ namespace selyan
 
         ~String();
 
+        bool empty() const
+        {
+            return m_stringLength == 0;
+        }
+
+        size_t length() const
+        {
+            return m_stringLength;
+        }
+
+        const char* c_str() const
+        {
+            return m_c_str;
+        }
+//
+//        String& toLower()
+//        {
+//            for(size_t i = 0; i < m_stringLength; ++i)
+//                m_c_str[i] = std::tolower(m_c_str[i]);
+//        }
+
         void operator=(const char* c_string);
 
         void operator=(const String& other);
@@ -29,13 +46,56 @@ namespace selyan
 
         char& operator[](size_t index);
 
-        iterator_type begin();
+        char operator[](size_t index) const;
 
-        iterator_type end();
+        String& operator+=(const String& other);
+
+        const String& operator+=(const String& other) const;
 
     private:
         size_t m_bufferSize;
         size_t m_stringLength;
         char* m_c_str;
     };
+
+    inline bool operator==(const String& left, const String& right)
+    {
+        if (left.length() != right.length())
+            return false;
+
+        for(size_t i = 0; i < left.length(); ++i)
+        {
+            if (left[i] != right[i])
+                return false;
+        }
+
+        return true;
+    }
+
+    inline bool operator!=(const String& left, const String& right)
+    {
+        return !(left == right);
+    }
+
+    inline String operator+(const String& left, const String& right)
+    {
+        String result{ left };
+        return result += right;
+    }
+
+    inline bool operator<(const String& left, const String& right)
+    {
+        size_t minLength = std::min(left.length(), right.length());
+        for(size_t i = 0; i < minLength; ++i)
+        {
+            if (left[i] == right[i])
+                continue;
+
+            return left[i] < right[i];
+        }
+
+        return left.length() < right.length();
+    }
+
 }
+

@@ -11,6 +11,8 @@ namespace selyan
     }
 
     String::String(const char* c_string)
+    :   m_stringLength(0),
+        m_bufferSize(0)
     {
         if (c_string == nullptr)
         {
@@ -42,11 +44,11 @@ namespace selyan
     {
         m_stringLength = other.m_stringLength;
         m_bufferSize = other.m_bufferSize;
-        m_c_str = new char[m_bufferSize];
-
-        std::strcpy(m_c_str, other.m_c_str);
+        m_c_str = other.m_c_str;
 
         other.m_stringLength = 0;
+        other.m_bufferSize = 0;
+        other.m_c_str = nullptr;
     }
 
     String::~String()
@@ -84,17 +86,55 @@ namespace selyan
 
     void String::operator=(String &&other)
     {
+        m_stringLength = other.m_stringLength;
+        m_bufferSize = other.m_bufferSize;
+        m_c_str = other.m_c_str;
 
+        other.m_stringLength = 0;
+        other.m_bufferSize = 0;
+        other.m_c_str = nullptr;
     }
+
     char &String::operator[](size_t index)
     {
-        if (index <= m_stringLength)
+        if (index >= m_stringLength)
             throw std::out_of_range("selyan::String out of range in operator[]");
 
         return m_c_str[index];
     }
-    String::iterator_type String::begin()
+
+    char String::operator[](size_t index) const
     {
-        return iterator_type{ m_c_str };
+        if (index >= m_stringLength)
+            throw std::out_of_range("selyan::String out of range in operator[]");
+
+        return m_c_str[index];
+    }
+
+    String &String::operator+=(const String &other)
+    {
+        if (other.empty())
+            return *this;
+
+        size_t newLength = m_stringLength + other.m_stringLength;
+        if (newLength > m_bufferSize)
+        {
+            m_bufferSize = newLength;
+            auto oldCStr = m_c_str;
+
+            m_c_str = new char[m_bufferSize];
+
+            std::strncpy(m_c_str, oldCStr, m_stringLength);
+            std::strncat(m_c_str, other.m_c_str, other.length());
+
+            m_stringLength = newLength;
+
+            delete[] oldCStr;
+            return *this;
+        }
+
+        m_stringLength = newLength;
+        std::strncat(m_c_str, other.m_c_str, other.length());
+        return *this;
     }
 }
