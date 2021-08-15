@@ -21,7 +21,7 @@ bool customCompare(const selyan::String& left, const selyan::String& right)
     return left.length() < right.length();
 }
 
-int main(int argc, char** argv)
+int main()
 {
     std::cout << "Input string count:";
 

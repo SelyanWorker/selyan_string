@@ -59,14 +59,6 @@ TEST(StringTests, SortResult)
     std::vector<std::string> stdStrings{ sample[0], sample[1], sample[2], sample[3], sample[4] };
     std::vector<selyan::String> selyanStrings{ sample[0], sample[1], sample[2], sample[3], sample[4] };
 
-    bool stdEq = stdStrings[0] < stdStrings[2];
-    bool sEq = selyanStrings[0] < selyanStrings[2];
-
-    selyan::String str_0{ "govno" };
-    selyan::String str_1{ "ti" };
-
-    std::swap(str_0, str_1);
-
     std::sort(stdStrings.begin(), stdStrings.end());
     std::sort(selyanStrings.begin(), selyanStrings.end());
 

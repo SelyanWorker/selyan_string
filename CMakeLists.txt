@@ -16,5 +16,6 @@ target_link_libraries(test.string
         selyan.string
         GTest::gtest
         )
+add_test(test test.string)
 
 add_subdirectory(sandbox)

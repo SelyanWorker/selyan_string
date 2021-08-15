@@ -31,12 +31,6 @@ namespace selyan
         {
             return m_c_str;
         }
-//
-//        String& toLower()
-//        {
-//            for(size_t i = 0; i < m_stringLength; ++i)
-//                m_c_str[i] = std::tolower(m_c_str[i]);
-//        }
 
         void operator=(const char* c_string);
 
